@@ -1,6 +1,7 @@
 class Api::V1::UsersController < ApplicationController
 	
 	def create
+		
 		if !params[:auth]
 			render json: { error: "Auth param is missing"}
 		else
