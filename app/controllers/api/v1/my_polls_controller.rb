@@ -1,4 +1,5 @@
 class Api::V1::MyPollsController < ApplicationController
+    before_action :authenticate, only:[:create, :update, :destroy]
     def index
         @polls = MyPoll.all
     end 
@@ -8,6 +9,15 @@ class Api::V1::MyPollsController < ApplicationController
     end 
 
     def create
+        @poll = @current_user.my_polls.new(my_polls_params)
+        if @poll.save
+            render :show  
+        else
+            render json: {
+                errors: @poll.errors.full_messages,
+                status: :unprocessable_entity
+            }
+        end  
     end
 
     def update 
@@ -16,4 +26,8 @@ class Api::V1::MyPollsController < ApplicationController
     def destroy
     end 
 
+    private 
+    def my_polls_params
+        params.require(:poll).permit(:title, :description, :expires_at)
+    end
 end
