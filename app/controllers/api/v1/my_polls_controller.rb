@@ -17,9 +17,8 @@ class Api::V1::MyPollsController < ApplicationController
             render :show  
         else
             render json: {
-                errors: @poll.errors.full_messages,
-                status: :unprocessable_entity
-            }
+                errors: @poll.errors.full_messages
+            }, status: :unprocessable_entity
         end  
     end
 

@@ -1,6 +1,6 @@
 class Api::V1::QuestionsController < ApplicationController
     before_action :authenticate, except: [:index, :show]
-    before_action :set_question, only:[:update, :show, :delete]
+    before_action :set_question, only:[:update, :show, :destroy]
     before_action :set_poll
     before_action(only:[:update,:destroy, :create]) { 
         |controller| controller.authenticate_owner(@poll.user)
@@ -25,9 +25,18 @@ class Api::V1::QuestionsController < ApplicationController
     end 
      
     def update 
+        if @question.update(question_params)
+            render template: "api/v1/questions/show"
+        else
+            render json: {
+                error: @question.errors 
+            }, status: :unprocessable_entity 
+        end 
     end 
 
     def delete 
+        @question.destroy
+        head :ok
     end
 
     private
