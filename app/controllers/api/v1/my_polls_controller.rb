@@ -35,16 +35,6 @@ class Api::V1::MyPollsController < ApplicationController
         }
     end 
 
-    protected
-    def authenticate_owner(owner)
-        if owner != @current_user 
-            render json: {
-                errors: "You're not authorized to eliminate this poll.",
-                status: :unauthorized
-            }
-        end
-    end
-
     private 
 
     def my_polls_params

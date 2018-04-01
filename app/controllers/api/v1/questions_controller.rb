@@ -2,6 +2,9 @@ class Api::V1::QuestionsController < ApplicationController
     before_action :authenticate, except: [:index, :show]
     before_action :set_question, only:[:update, :show, :delete]
     before_action :set_poll
+    before_action(only:[:update,:destroy, :create]) { 
+        |controller| controller.authenticate_owner(@poll.user)
+    }
     def index
         @questions = @poll.questions
     end
